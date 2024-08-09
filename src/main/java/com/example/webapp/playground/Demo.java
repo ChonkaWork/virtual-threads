@@ -26,7 +26,7 @@ public class Demo {
 
     @SneakyThrows
     private static long[] heavyLoadComparison() {
-        int taskCount = 1000;
+        int taskCount = 10000;
         long virtualThreadsTime, platformThreadsTime;
 
         System.out.println("Running with virtual threads...");
@@ -45,10 +45,10 @@ public class Demo {
 
         System.out.println("Running with platform threads...");
         start = Instant.now();
-        try (var executor = Executors.newFixedThreadPool(100)) {
+        try (var executor = Executors.newFixedThreadPool(1000)) {
             var futures = IntStream.range(0, taskCount)
                     .mapToObj(i -> executor.submit(() -> simulateHeavyTask(i)))
-                    .toArray(Future[]::new);
+                    .toList();
             for (Future<?> future : futures) {
                 future.get();
             }
@@ -64,7 +64,7 @@ public class Demo {
     @SneakyThrows
     private static void simulateHeavyTask(int taskId) {
         System.out.println(Thread.currentThread() + " - Task " + taskId + " started");
-        Thread.sleep(100);
+        Thread.sleep(1000);
         System.out.println(Thread.currentThread() + " - Task " + taskId + " completed");
     }
 }

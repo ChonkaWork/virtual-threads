@@ -14,9 +14,8 @@ fun main() = runBlocking {
 }
 
 suspend fun heavyLoadComparison(): Pair<Long, Long> {
-    val taskCount = 10000
+    val taskCount = 1000
 
-    // Measure time for coroutines
     println("Running with coroutines...")
     var start = Instant.now()
     runBlocking {
@@ -31,7 +30,6 @@ suspend fun heavyLoadComparison(): Pair<Long, Long> {
     val coroutinesTime = Duration.between(start, end).toMillis()
     println("Coroutines time: $coroutinesTime ms")
 
-    // Measure time for platform threads
     println("Running with platform threads...")
     start = Instant.now()
     val executor = Executors.newFixedThreadPool(100)
@@ -52,14 +50,14 @@ suspend fun heavyLoadComparison(): Pair<Long, Long> {
 
 suspend fun simulateHeavyTaskCoroutine(taskId: Int) {
     println("Coroutine - Task $taskId started")
-    delay(1000)  // Simulate a heavy blocking operation
+    delay(1000)
     println("Coroutine - Task $taskId completed")
 }
 
 fun simulateHeavyTaskThread(taskId: Int) {
     println("Thread - Task $taskId started")
     try {
-        Thread.sleep(1000)  // Simulate a heavy blocking operation
+        Thread.sleep(1000)
     } catch (e: InterruptedException) {
         e.printStackTrace()
     }
